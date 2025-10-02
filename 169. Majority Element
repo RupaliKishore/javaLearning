@@ -1,0 +1,8 @@
+
+169. Majority Element
+
+Line 7: error: cannot find symbol [in __Driver__.java]
+      int ret = new Solution().majorityElement(param_1);
+                    ^
+  symbol:   class Solution
+  location: class __DriverSolution__
