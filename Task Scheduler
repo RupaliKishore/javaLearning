@@ -1,0 +1,50 @@
+ Task Scheduler
+
+
+import java.util.*;
+
+class Solution {
+    public int leastInterval(char[] tasks, int n) {
+        // Count frequency of each task
+        int[] freq = new int[26];
+        for (char task : tasks) {
+            freq[task - 'A']++;
+        }
+        
+        // Max heap to always process the most frequent task first
+        PriorityQueue<Integer> maxHeap = new PriorityQueue<>((a, b) -> b - a);
+        for (int count : freq) {
+            if (count > 0) {
+                maxHeap.offer(count);
+            }
+        }
+        
+        int time = 0;
+        
+        while (!maxHeap.isEmpty()) {
+            List<Integer> temp = new ArrayList<>();
+            int cycleTime = 0;
+            
+            // Process up to n+1 tasks in one cycle
+            for (int i = 0; i <= n; i++) {
+                if (!maxHeap.isEmpty()) {
+                    int count = maxHeap.poll();
+                    if (count > 1) {
+                        temp.add(count - 1);
+                    }
+                    cycleTime++;
+                }
+            }
+            
+            // Add back remaining tasks to heap
+            for (int count : temp) {
+                maxHeap.offer(count);
+            }
+            
+            // If heap is empty, add only the tasks processed, else add full cycle time
+            time += maxHeap.isEmpty() ? cycleTime : n + 1;
+        }
+        
+        return time;
+    }
+}
