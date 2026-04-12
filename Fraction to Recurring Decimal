@@ -1,0 +1,56 @@
+ Fraction to Recurring Decimal
+
+
+class Solution {
+    public String fractionToDecimal(int numerator, int denominator) {
+        // Handle zero numerator
+        if (numerator == 0) return "0";
+        
+        StringBuilder result = new StringBuilder();
+        
+        // Handle sign
+        if ((numerator < 0) ^ (denominator < 0)) {
+            result.append("-");
+        }
+        
+        // Convert to long to avoid overflow
+        long num = Math.abs((long) numerator);
+        long den = Math.abs((long) denominator);
+        
+        // Append integer part
+        result.append(num / den);
+        
+        long remainder = num % den;
+        
+        // If no remainder, return
+        if (remainder == 0) {
+            return result.toString();
+        }
+        
+        // Add decimal point
+        result.append(".");
+        
+        // Map to store remainder positions
+        Map<Long, Integer> remainderMap = new HashMap<>();
+        
+        while (remainder != 0) {
+            // If remainder already seen, we found a repeating cycle
+            if (remainderMap.containsKey(remainder)) {
+                int start = remainderMap.get(remainder);
+                result.insert(start, "(");
+                result.append(")");
+                break;
+            }
+            
+            // Store position of this remainder
+            remainderMap.put(remainder, result.length());
+            
+            // Perform long division
+            remainder *= 10;
+            result.append(remainder / den);
+            remainder %= den;
+        }
+        
+        return result.toString();
+    }
+}
