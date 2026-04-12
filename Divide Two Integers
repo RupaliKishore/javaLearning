@@ -1,0 +1,38 @@
+Divide Two Integers
+
+
+class Solution {
+    public int divide(int dividend, int divisor) {
+        // Handle overflow case
+        if (dividend == Integer.MIN_VALUE && divisor == -1) {
+            return Integer.MAX_VALUE;
+        }
+        
+        // Determine sign of result
+        boolean negative = (dividend < 0) ^ (divisor < 0);
+        
+        // Work with positive numbers using long to avoid overflow
+        long dividendL = Math.abs((long) dividend);
+        long divisorL = Math.abs((long) divisor);
+        
+        long quotient = 0;
+        
+        // Bit manipulation: find largest multiple
+        while (dividendL >= divisorL) {
+            long temp = divisorL;
+            long multiple = 1;
+            
+            // Double the divisor until it's larger than dividend
+            while (dividendL >= (temp << 1)) {
+                temp <<= 1;
+                multiple <<= 1;
+            }
+            
+            // Subtract the found multiple
+            dividendL -= temp;
+            quotient += multiple;
+        }
+        
+        return negative ? (int) -quotient : (int) quotient;
+    }
+}
