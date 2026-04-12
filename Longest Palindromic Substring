@@ -1,0 +1,56 @@
+ Longest Palindromic Substring
+
+class Solution {
+    public String longestPalindrome(String s) {
+        if (s == null || s.length() < 2) return s;
+        
+        // Transform string to avoid even/odd length handling
+        String transformed = transform(s);
+        int n = transformed.length();
+        int[] P = new int[n];
+        int center = 0, right = 0;
+        
+        for (int i = 1; i < n - 1; i++) {
+            int mirror = 2 * center - i;
+            
+            if (i < right) {
+                P[i] = Math.min(right - i, P[mirror]);
+            }
+            
+            // Expand around center i
+            while (transformed.charAt(i + P[i] + 1) == transformed.charAt(i - P[i] - 1)) {
+                P[i]++;
+            }
+            
+            // Update center and right boundary
+            if (i + P[i] > right) {
+                center = i;
+                right = i + P[i];
+            }
+        }
+        
+        // Find maximum palindrome length
+        int maxLen = 0;
+        int centerIndex = 0;
+        for (int i = 1; i < n - 1; i++) {
+            if (P[i] > maxLen) {
+                maxLen = P[i];
+                centerIndex = i;
+            }
+        }
+        
+        // Extract original substring
+        int start = (centerIndex - maxLen) / 2;
+        return s.substring(start, start + maxLen);
+    }
+    
+    private String transform(String s) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("^");
+        for (char c : s.toCharArray()) {
+            sb.append("#").append(c);
+        }
+        sb.append("#$");
+        return sb.toString();
+    }
+}
