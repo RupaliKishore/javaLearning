@@ -1,0 +1,58 @@
+Search for a Range
+
+
+class Solution {
+    public int[] searchRange(int[] nums, int target) {
+        int[] result = new int[]{-1, -1};
+        
+        // Find first occurrence
+        result[0] = findFirst(nums, target);
+        
+        // Find last occurrence
+        result[1] = findLast(nums, target);
+        
+        return result;
+    }
+    
+    private int findFirst(int[] nums, int target) {
+        int left = 0;
+        int right = nums.length - 1;
+        int firstIndex = -1;
+        
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            
+            if (nums[mid] == target) {
+                firstIndex = mid;
+                right = mid - 1; // Look for earlier occurrence
+            } else if (nums[mid] < target) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        
+        return firstIndex;
+    }
+    
+    private int findLast(int[] nums, int target) {
+        int left = 0;
+        int right = nums.length - 1;
+        int lastIndex = -1;
+        
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            
+            if (nums[mid] == target) {
+                lastIndex = mid;
+                left = mid + 1; // Look for later occurrence
+            } else if (nums[mid] < target) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        
+        return lastIndex;
+    }
+}
