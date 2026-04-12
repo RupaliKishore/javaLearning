@@ -1,0 +1,35 @@
+Permutations
+
+
+class Solution {
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        backtrack(result, new ArrayList<>(), nums, new boolean[nums.length]);
+        return result;
+    }
+    
+    private void backtrack(List<List<Integer>> result, List<Integer> current, int[] nums, boolean[] used) {
+        // Base case: all numbers are used
+        if (current.size() == nums.length) {
+            result.add(new ArrayList<>(current));
+            return;
+        }
+        
+        // Try each number that hasn't been used yet
+        for (int i = 0; i < nums.length; i++) {
+            if (!used[i]) {
+                // Choose
+                current.add(nums[i]);
+                used[i] = true;
+                
+                // Explore
+                backtrack(result, current, nums, used);
+                
+                // Unchoose (backtrack)
+                current.remove(current.size() - 1);
+                used[i] = false;
+            }
+        }
+    }
+}
+
