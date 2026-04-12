@@ -1,0 +1,36 @@
+  Pow(x, n)
+
+
+class Solution {
+    public double myPow(double x, int n) {
+        // Handle base case
+        if (n == 0) {
+            return 1.0;
+        }
+        
+        // Handle negative exponent
+        if (n < 0) {
+            // Special case: if n = Integer.MIN_VALUE, -n would overflow
+            // So we handle it by using long
+            long exp = n;
+            exp = -exp;
+            return 1.0 / fastPow(x, exp);
+        }
+        
+        return fastPow(x, n);
+    }
+    
+    private double fastPow(double x, long n) {
+        if (n == 0) {
+            return 1.0;
+        }
+        
+        double half = fastPow(x, n / 2);
+        
+        if (n % 2 == 0) {
+            return half * half;
+        } else {
+            return half * half * x;
+        }
+    }
+}
