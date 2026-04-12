@@ -1,0 +1,55 @@
+  Construct Binary Tree from Preorder and Inorder Traversal
+
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    private Map<Integer, Integer> inorderIndexMap;
+    private int preorderIndex;
+    
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        // Create map for O(1) lookup of root index in inorder array
+        inorderIndexMap = new HashMap<>();
+        for (int i = 0; i < inorder.length; i++) {
+            inorderIndexMap.put(inorder[i], i);
+        }
+        
+        preorderIndex = 0;
+        return buildTreeHelper(preorder, 0, inorder.length - 1);
+    }
+    
+    private TreeNode buildTreeHelper(int[] preorder, int inorderStart, int inorderEnd) {
+        // Base case: no elements to construct
+        if (inorderStart > inorderEnd) {
+            return null;
+        }
+        
+        // Root is the current element in preorder
+        int rootVal = preorder[preorderIndex++];
+        TreeNode root = new TreeNode(rootVal);
+        
+        // Find root index in inorder traversal
+        int rootIndex = inorderIndexMap.get(rootVal);
+        
+        // Build left subtree (elements before root in inorder)
+        root.left = buildTreeHelper(preorder, inorderStart, rootIndex - 1);
+        
+        // Build right subtree (elements after root in inorder)
+        root.right = buildTreeHelper(preorder, rootIndex + 1, inorderEnd);
+        
+        return root;
+    }
+}
