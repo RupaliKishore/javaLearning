@@ -1,0 +1,26 @@
+  Increasing Triplet Subsequence
+
+class Solution {
+    public boolean increasingTriplet(int[] nums) {
+        if (nums == null || nums.length < 3) return false;
+        
+        // Initialize with maximum values
+        int first = Integer.MAX_VALUE;
+        int second = Integer.MAX_VALUE;
+        
+        for (int num : nums) {
+            if (num <= first) {
+                // Update smallest element
+                first = num;
+            } else if (num <= second) {
+                // Update second smallest element
+                second = num;
+            } else {
+                // Found third element greater than both
+                return true;
+            }
+        }
+        
+        return false;
+    }
+}
