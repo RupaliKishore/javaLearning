@@ -1,0 +1,79 @@
+  Word Search II
+
+
+import java.util.*;
+
+class Solution {
+    // Trie Node
+    class TrieNode {
+        TrieNode[] children = new TrieNode[26];
+        String word = null; // Store the word at the end node
+    }
+    
+    private TrieNode root = new TrieNode();
+    private int m, n;
+    private char[][] board;
+    private List<String> result = new ArrayList<>();
+    
+    public List<String> findWords(char[][] board, String[] words) {
+        this.board = board;
+        this.m = board.length;
+        this.n = board[0].length;
+        
+        // Build Trie
+        for (String word : words) {
+            insert(word);
+        }
+        
+        // Start DFS from each cell
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                char c = board[i][j];
+                if (root.children[c - 'a'] != null) {
+                    dfs(i, j, root.children[c - 'a']);
+                }
+            }
+        }
+        
+        return result;
+    }
+    
+    private void insert(String word) {
+        TrieNode node = root;
+        for (char c : word.toCharArray()) {
+            int index = c - 'a';
+            if (node.children[index] == null) {
+                node.children[index] = new TrieNode();
+            }
+            node = node.children[index];
+        }
+        node.word = word; // Store word at the end
+    }
+    
+    private void dfs(int i, int j, TrieNode node) {
+        // If we found a word
+        if (node.word != null) {
+            result.add(node.word);
+            node.word = null; // Avoid duplicate
+        }
+        
+        char temp = board[i][j];
+        board[i][j] = '#'; // Mark as visited
+        
+        // Explore 4 directions
+        int[][] dirs = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        for (int[] dir : dirs) {
+            int ni = i + dir[0];
+            int nj = j + dir[1];
+            
+            if (ni >= 0 && ni < m && nj >= 0 && nj < n && board[ni][nj] != '#') {
+                char nextChar = board[ni][nj];
+                if (node.children[nextChar - 'a'] != null) {
+                    dfs(ni, nj, node.children[nextChar - 'a']);
+                }
+            }
+        }
+        
+        board[i][j] = temp; // Restore
+    }
+}
