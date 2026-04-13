@@ -1,0 +1,24 @@
+Queue Reconstruction by Height
+
+
+import java.util.*;
+
+class Solution {
+    public int[][] reconstructQueue(int[][] people) {
+        // Sort by height descending, then by k ascending
+        Arrays.sort(people, (a, b) -> {
+            if (a[0] != b[0]) {
+                return b[0] - a[0]; // Higher height first
+            }
+            return a[1] - b[1]; // Smaller k first
+        });
+        
+        List<int[]> result = new ArrayList<>();
+        
+        for (int[] person : people) {
+            result.add(person[1], person);
+        }
+        
+        return result.toArray(new int[people.length][2]);
+    }
+}
