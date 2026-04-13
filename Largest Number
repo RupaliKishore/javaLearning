@@ -1,0 +1,30 @@
+  Largest Number
+
+
+import java.util.*;
+
+class Solution {
+    public String largestNumber(int[] nums) {
+        // Convert int array to String array
+        String[] strs = new String[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            strs[i] = String.valueOf(nums[i]);
+        }
+        
+        // Sort with custom comparator
+        Arrays.sort(strs, (a, b) -> (b + a).compareTo(a + b));
+        
+        // Handle case where all numbers are zero
+        if (strs[0].equals("0")) {
+            return "0";
+        }
+        
+        // Build result
+        StringBuilder result = new StringBuilder();
+        for (String s : strs) {
+            result.append(s);
+        }
+        
+        return result.toString();
+    }
+}
