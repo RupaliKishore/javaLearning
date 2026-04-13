@@ -1,0 +1,25 @@
+  Product of Array Except Self
+
+
+class Solution {
+    public int[] productExceptSelf(int[] nums) {
+        int n = nums.length;
+        int[] result = new int[n];
+        
+        // First pass: Calculate prefix products (products of elements to the left)
+        int prefixProduct = 1;
+        for (int i = 0; i < n; i++) {
+            result[i] = prefixProduct;
+            prefixProduct *= nums[i];
+        }
+        
+        // Second pass: Multiply by suffix products (products of elements to the right)
+        int suffixProduct = 1;
+        for (int i = n - 1; i >= 0; i--) {
+            result[i] *= suffixProduct;
+            suffixProduct *= nums[i];
+        }
+        
+        return result;
+    }
+}
