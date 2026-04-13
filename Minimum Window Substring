@@ -1,0 +1,62 @@
+  Minimum Window Substring
+
+
+import java.util.*;
+
+class Solution {
+    public String minWindow(String s, String t) {
+        if (s == null || t == null || s.length() < t.length()) {
+            return "";
+        }
+        
+        // Count required characters
+        Map<Character, Integer> required = new HashMap<>();
+        for (char c : t.toCharArray()) {
+            required.put(c, required.getOrDefault(c, 0) + 1);
+        }
+        
+        // Sliding window
+        Map<Character, Integer> window = new HashMap<>();
+        int have = 0;
+        int need = required.size();
+        
+        int left = 0;
+        int minLen = Integer.MAX_VALUE;
+        int minStart = 0;
+        
+        for (int right = 0; right < s.length(); right++) {
+            char c = s.charAt(right);
+            
+            // Add current character to window
+            window.put(c, window.getOrDefault(c, 0) + 1);
+            
+            // Check if this character helps meet a requirement
+            if (required.containsKey(c) && window.get(c).intValue() == required.get(c).intValue()) {
+                have++;
+            }
+            
+            // Try to shrink window while we have all required characters
+            while (have == need) {
+                // Update minimum window
+                if (right - left + 1 < minLen) {
+                    minLen = right - left + 1;
+                    minStart = left;
+                }
+                
+                // Remove leftmost character
+                char leftChar = s.charAt(left);
+                window.put(leftChar, window.get(leftChar) - 1);
+                
+                // If removing breaks a requirement
+                if (required.containsKey(leftChar) && 
+                    window.get(leftChar).intValue() < required.get(leftChar).intValue()) {
+                    have--;
+                }
+                
+                left++;
+            }
+        }
+        
+        return minLen == Integer.MAX_VALUE ? "" : s.substring(minStart, minStart + minLen);
+    }
+}
