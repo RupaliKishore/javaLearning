@@ -1,0 +1,42 @@
+Wildcard Matching
+
+
+class Solution {
+    public boolean isMatch(String s, String p) {
+        int i = 0; // pointer for string s
+        int j = 0; // pointer for pattern p
+        int starIdx = -1; // index of last '*' in pattern
+        int matchIdx = 0; // index in string matched by '*'
+        
+        while (i < s.length()) {
+            // Case 1: Characters match or pattern has '?'
+            if (j < p.length() && (p.charAt(j) == '?' || p.charAt(j) == s.charAt(i))) {
+                i++;
+                j++;
+            }
+            // Case 2: Pattern has '*'
+            else if (j < p.length() && p.charAt(j) == '*') {
+                starIdx = j;
+                matchIdx = i;
+                j++; // move pattern pointer, treat '*' as matching empty
+            }
+            // Case 3: Mismatch but we have a previous '*'
+            else if (starIdx != -1) {
+                j = starIdx + 1; // reset pattern to after '*'
+                matchIdx++;
+                i = matchIdx; // move string pointer to match more characters
+            }
+            // Case 4: No match and no previous '*'
+            else {
+                return false;
+            }
+        }
+        
+        // Check remaining characters in pattern (should all be '*')
+        while (j < p.length() && p.charAt(j) == '*') {
+            j++;
+        }
+        
+        return j == p.length();
+    }
+}
