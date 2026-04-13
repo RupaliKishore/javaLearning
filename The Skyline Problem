@@ -1,0 +1,49 @@
+ The Skyline Problem
+
+
+import java.util.*;
+
+class Solution {
+    public List<List<Integer>> getSkyline(int[][] buildings) {
+        List<List<Integer>> result = new ArrayList<>();
+        
+        // Create events: (x, height) with negative height for start
+        List<int[]> events = new ArrayList<>();
+        for (int[] building : buildings) {
+            events.add(new int[]{building[0], -building[2]}); // start event
+            events.add(new int[]{building[1], building[2]});  // end event
+        }
+        
+        // Sort events: by x, then start before end (negative heights first)
+        events.sort((a, b) -> {
+            if (a[0] != b[0]) return a[0] - b[0];
+            return a[1] - b[1];
+        });
+        
+        // Max heap to store heights (use negative for max-heap)
+        PriorityQueue<Integer> maxHeap = new PriorityQueue<>((a, b) -> b - a);
+        maxHeap.offer(0); // ground height
+        int prevMax = 0;
+        
+        for (int[] event : events) {
+            int x = event[0];
+            int height = event[1];
+            
+            if (height < 0) {
+                // Start of building
+                maxHeap.offer(-height);
+            } else {
+                // End of building
+                maxHeap.remove(height);
+            }
+            
+            int currentMax = maxHeap.peek();
+            if (currentMax != prevMax) {
+                result.add(Arrays.asList(x, currentMax));
+                prevMax = currentMax;
+            }
+        }
+        
+        return result;
+    }
+}
