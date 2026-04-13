@@ -1,0 +1,46 @@
+  Word Break II
+
+import java.util.*;
+
+class Solution {
+    private String s;
+    private Set<String> wordSet;
+    private Map<Integer, List<String>> memo;
+    
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        this.s = s;
+        this.wordSet = new HashSet<>(wordDict);
+        this.memo = new HashMap<>();
+        return dfs(0);
+    }
+    
+    private List<String> dfs(int start) {
+        if (memo.containsKey(start)) {
+            return memo.get(start);
+        }
+        
+        List<String> result = new ArrayList<>();
+        
+        if (start == s.length()) {
+            result.add("");
+            return result;
+        }
+        
+        for (int end = start + 1; end <= s.length(); end++) {
+            String word = s.substring(start, end);
+            if (wordSet.contains(word)) {
+                List<String> suffixes = dfs(end);
+                for (String suffix : suffixes) {
+                    if (suffix.isEmpty()) {
+                        result.add(word);
+                    } else {
+                        result.add(word + " " + suffix);
+                    }
+                }
+            }
+        }
+        
+        memo.put(start, result);
+        return result;
+    }
+}
