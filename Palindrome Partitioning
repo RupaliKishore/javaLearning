@@ -1,0 +1,43 @@
+Palindrome Partitioning
+
+
+import java.util.*;
+
+class Solution {
+    public List<List<String>> partition(String s) {
+        List<List<String>> result = new ArrayList<>();
+        backtrack(s, 0, new ArrayList<>(), result);
+        return result;
+    }
+    
+    private void backtrack(String s, int start, List<String> current, List<List<String>> result) {
+        // If we've reached the end of the string, add the current partition to result
+        if (start == s.length()) {
+            result.add(new ArrayList<>(current));
+            return;
+        }
+        
+        // Try all possible substrings starting from 'start'
+        for (int end = start; end < s.length(); end++) {
+            String substring = s.substring(start, end + 1);
+            if (isPalindrome(substring)) {
+                current.add(substring);
+                backtrack(s, end + 1, current, result);
+                current.remove(current.size() - 1); // Backtrack
+            }
+        }
+    }
+    
+    private boolean isPalindrome(String s) {
+        int left = 0;
+        int right = s.length() - 1;
+        while (left < right) {
+            if (s.charAt(left) != s.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
+    }
+}
