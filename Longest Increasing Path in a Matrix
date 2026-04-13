@@ -1,0 +1,49 @@
+ Longest Increasing Path in a Matrix
+
+
+class Solution {
+    private int[][] matrix;
+    private int[][] memo;
+    private int m, n;
+    private int[][] dirs = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+    
+    public int longestIncreasingPath(int[][] matrix) {
+        if (matrix == null || matrix.length == 0) return 0;
+        
+        this.matrix = matrix;
+        this.m = matrix.length;
+        this.n = matrix[0].length;
+        this.memo = new int[m][n];
+        
+        int longest = 0;
+        
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                longest = Math.max(longest, dfs(i, j));
+            }
+        }
+        
+        return longest;
+    }
+    
+    private int dfs(int i, int j) {
+        if (memo[i][j] != 0) {
+            return memo[i][j];
+        }
+        
+        int maxLength = 1; // Current cell counts as 1
+        
+        for (int[] dir : dirs) {
+            int ni = i + dir[0];
+            int nj = j + dir[1];
+            
+            if (ni >= 0 && ni < m && nj >= 0 && nj < n && 
+                matrix[ni][nj] > matrix[i][j]) {
+                maxLength = Math.max(maxLength, 1 + dfs(ni, nj));
+            }
+        }
+        
+        memo[i][j] = maxLength;
+        return maxLength;
+    }
+}
