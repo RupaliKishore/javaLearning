@@ -1,0 +1,35 @@
+Flatten a Multilevel Doubly Linked List
+
+
+ class Solution {
+    public Node flatten(Node head) {
+        if (head == null) return null;
+        
+        Node dummy = new Node(0);
+        Node current = dummy;
+        Stack<Node> stack = new Stack<>();
+        stack.push(head);
+        
+        while (!stack.isEmpty()) {
+            Node node = stack.pop();
+            
+            // Connect the node
+            current.next = node;
+            node.prev = current;
+            current = current.next;
+            
+            // Push next first, then child (so child is processed first)
+            if (node.next != null) {
+                stack.push(node.next);
+            }
+            if (node.child != null) {
+                stack.push(node.child);
+                node.child = null; // Clear child pointer
+            }
+        }
+        
+        // Remove dummy node
+        dummy.next.prev = null;
+        return dummy.next;
+    }
+}
