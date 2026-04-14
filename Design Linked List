@@ -1,0 +1,114 @@
+Design Linked List
+
+class ListNode {
+    int val;
+    ListNode next;
+    
+    ListNode() {}
+    
+    ListNode(int val) {
+        this.val = val;
+    }
+    
+    ListNode(int val, ListNode next) {
+        this.val = val;
+        this.next = next;
+    }
+}
+
+class MyLinkedList {
+    private ListNode head;
+    private int size;
+    
+    public MyLinkedList() {
+        head = null;
+        size = 0;
+    }
+    
+    public int get(int index) {
+        if (index < 0 || index >= size) {
+            return -1;
+        }
+        
+        ListNode current = head;
+        for (int i = 0; i < index; i++) {
+            current = current.next;
+        }
+        return current.val;
+    }
+    
+    public void addAtHead(int val) {
+        ListNode newHead = new ListNode(val, head);
+        head = newHead;
+        size++;
+    }
+    
+    public void addAtTail(int val) {
+        ListNode newNode = new ListNode(val);
+        
+        if (head == null) {
+            head = newNode;
+        } else {
+            ListNode current = head;
+            while (current.next != null) {
+                current = current.next;
+            }
+            current.next = newNode;
+        }
+        size++;
+    }
+    
+    public void addAtIndex(int index, int val) {
+        if (index < 0 || index > size) {
+            return;
+        }
+        
+        if (index == 0) {
+            addAtHead(val);
+            return;
+        }
+        
+        if (index == size) {
+            addAtTail(val);
+            return;
+        }
+        
+        ListNode current = head;
+        for (int i = 0; i < index - 1; i++) {
+            current = current.next;
+        }
+        
+        ListNode newNode = new ListNode(val, current.next);
+        current.next = newNode;
+        size++;
+    }
+    
+    public void deleteAtIndex(int index) {
+        if (index < 0 || index >= size) {
+            return;
+        }
+        
+        if (index == 0) {
+            head = head.next;
+        } else {
+            ListNode current = head;
+            for (int i = 0; i < index - 1; i++) {
+                current = current.next;
+            }
+            current.next = current.next.next;
+        }
+        size--;
+    }
+    
+    public void display() {
+        ListNode current = head;
+        while (current != null) {
+            System.out.print(current.val);
+            if (current.next != null) {
+                System.out.print(" -> ");
+            }
+            current = current.next;
+        }
+        System.out.println();
+    }
+}
