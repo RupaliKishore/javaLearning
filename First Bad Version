@@ -1,0 +1,23 @@
+ First Bad Version
+
+
+ public class Solution extends VersionControl {
+    public int firstBadVersion(int n) {
+        int left = 1;
+        int right = n;
+        
+        while (left < right) {
+            int mid = left + (right - left) / 2; // Avoid overflow
+            
+            if (isBadVersion(mid)) {
+                // Current version is bad, search left (including current)
+                right = mid;
+            } else {
+                // Current version is good, search right
+                left = mid + 1;
+            }
+        }
+        
+        return left; // left == right == first bad version
+    }
+}
