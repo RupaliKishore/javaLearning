@@ -1,0 +1,36 @@
+Contains Duplicate III
+
+
+import java.util.TreeSet;
+
+class Solution {
+    public boolean containsNearbyAlmostDuplicate(int[] nums, int indexDiff, int valueDiff) {
+        if (nums == null || nums.length < 2 || indexDiff <= 0) {
+            return false;
+        }
+        
+        TreeSet<Long> window = new TreeSet<>();
+        
+        for (int i = 0; i < nums.length; i++) {
+            long current = (long) nums[i];
+            
+            // Find the smallest element >= current - valueDiff
+            Long floor = window.ceiling(current - valueDiff);
+            
+            // Check if it's within valueDiff
+            if (floor != null && floor <= current + valueDiff) {
+                return true;
+            }
+            
+            // Add current element to window
+            window.add(current);
+            
+            // Remove element that's out of indexDiff range
+            if (window.size() > indexDiff) {
+                window.remove((long) nums[i - indexDiff]);
+            }
+        }
+        
+        return false;
+    }
+}
