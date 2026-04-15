@@ -1,0 +1,27 @@
+Lowest Common Ancestor of a Binary Search Tree
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        // If both nodes are smaller, LCA is in left subtree
+        if (p.val < root.val && q.val < root.val) {
+            return lowestCommonAncestor(root.left, p, q);
+        }
+        // If both nodes are larger, LCA is in right subtree
+        else if (p.val > root.val && q.val > root.val) {
+            return lowestCommonAncestor(root.right, p, q);
+        }
+        // One is smaller, one is larger (or equal) - current node is LCA
+        else {
+            return root;
+        }
+    }
+}
