@@ -1,0 +1,24 @@
+ N-ary Tree Postorder Traversal
+
+
+ class Solution {
+    public List<Integer> postorder(Node root) {
+        List<Integer> result = new ArrayList<>();
+        postorderHelper(root, result);
+        return result;
+    }
+    
+    private void postorderHelper(Node node, List<Integer> result) {
+        if (node == null) {
+            return;
+        }
+        
+        // First traverse all children
+        for (Node child : node.children) {
+            postorderHelper(child, result);
+        }
+        
+        // Then visit root
+        result.add(node.val);
+    }
+}
