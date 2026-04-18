@@ -1,0 +1,64 @@
+Maximum XOR of Two Numbers in an Array
+
+
+
+class Solution {
+    public int findMaximumXOR(int[] nums) {
+        TrieNode root = new TrieNode();
+        
+        // Insert all numbers into the trie
+        for (int num : nums) {
+            insert(root, num);
+        }
+        
+        // Find maximum XOR for each number
+        int maxXOR = 0;
+        for (int num : nums) {
+            maxXOR = Math.max(maxXOR, findMaxXOR(root, num));
+        }
+        
+        return maxXOR;
+    }
+    
+    private void insert(TrieNode root, int num) {
+        TrieNode current = root;
+        // Process bits from MSB to LSB (31 to 0 for 32-bit integers)
+        for (int i = 31; i >= 0; i--) {
+            int bit = (num >> i) & 1;
+            if (current.children[bit] == null) {
+                current.children[bit] = new TrieNode();
+            }
+            current = current.children[bit];
+        }
+    }
+    
+    private int findMaxXOR(TrieNode root, int num) {
+        TrieNode current = root;
+        int maxXOR = 0;
+        
+        for (int i = 31; i >= 0; i--) {
+            int bit = (num >> i) & 1;
+            // We want opposite bit for maximum XOR
+            int desiredBit = 1 - bit;
+            
+            if (current.children[desiredBit] != null) {
+                // We can set this bit in the result
+                maxXOR |= (1 << i);
+                current = current.children[desiredBit];
+            } else {
+                // Must take the same bit
+                current = current.children[bit];
+            }
+        }
+        
+        return maxXOR;
+    }
+    
+    private class TrieNode {
+        TrieNode[] children;
+        
+        TrieNode() {
+            children = new TrieNode[2]; // Only 2 bits (0 and 1)
+        }
+    }
+}
