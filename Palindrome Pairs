@@ -1,0 +1,71 @@
+Palindrome Pairs
+
+
+class Solution {
+    public List<List<Integer>> palindromePairs(String[] words) {
+        List<List<Integer>> result = new ArrayList<>();
+        Map<String, Integer> map = new HashMap<>();
+        
+        // Store all words and their indices
+        for (int i = 0; i < words.length; i++) {
+            map.put(words[i], i);
+        }
+        
+        for (int i = 0; i < words.length; i++) {
+            String word = words[i];
+            
+            // Case 1: Empty string case
+            if (word.isEmpty()) {
+                for (int j = 0; j < words.length; j++) {
+                    if (i != j && isPalindrome(words[j])) {
+                        result.add(Arrays.asList(i, j));
+                        result.add(Arrays.asList(j, i));
+                    }
+                }
+                continue;
+            }
+            
+            // Case 2: Check reverse of whole word
+            String reversed = new StringBuilder(word).reverse().toString();
+            if (map.containsKey(reversed) && map.get(reversed) != i) {
+                result.add(Arrays.asList(i, map.get(reversed)));
+            }
+            
+            // Case 3: Check for prefixes and suffixes
+            for (int k = 1; k <= word.length(); k++) {
+                String prefix = word.substring(0, k);
+                String suffix = word.substring(k);
+                
+                // If prefix is palindrome, check if reverse of suffix exists
+                if (isPalindrome(prefix)) {
+                    String revSuffix = new StringBuilder(suffix).reverse().toString();
+                    if (map.containsKey(revSuffix) && map.get(revSuffix) != i) {
+                        result.add(Arrays.asList(map.get(revSuffix), i));
+                    }
+                }
+                
+                // If suffix is palindrome, check if reverse of prefix exists
+                if (isPalindrome(suffix)) {
+                    String revPrefix = new StringBuilder(prefix).reverse().toString();
+                    if (map.containsKey(revPrefix) && map.get(revPrefix) != i) {
+                        result.add(Arrays.asList(i, map.get(revPrefix)));
+                    }
+                }
+            }
+        }
+        
+        return result;
+    }
+    
+    private boolean isPalindrome(String s) {
+        int left = 0, right = s.length() - 1;
+        while (left < right) {
+            if (s.charAt(left) != s.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
+    }
+}
