@@ -1,0 +1,23 @@
+Design HashSet
+
+
+class MyHashSet {
+    private boolean[] set;
+    private final int SIZE = 1000001; // Based on constraints (0 <= key <= 10^6)
+    
+    public MyHashSet() {
+        set = new boolean[SIZE];
+    }
+    
+    public void add(int key) {
+        set[key] = true;
+    }
+    
+    public void remove(int key) {
+        set[key] = false;
+    }
+    
+    public boolean contains(int key) {
+        return set[key];
+    }
+}
