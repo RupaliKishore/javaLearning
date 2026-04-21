@@ -1,0 +1,98 @@
+Design HashMap
+
+
+class MyHashMap {
+    private static final int SIZE = 10000;
+    private Node[] buckets;
+    
+    /** Initialize your data structure here. */
+    public MyHashMap() {
+        buckets = new Node[SIZE];
+    }
+    
+    /** value will always be non-negative. */
+    public void put(int key, int value) {
+        int index = getIndex(key);
+        Node head = buckets[index];
+        
+        // If bucket is empty, create new node
+        if (head == null) {
+            buckets[index] = new Node(key, value);
+            return;
+        }
+        
+        // Check if key exists, update value
+        Node curr = head;
+        while (curr != null) {
+            if (curr.key == key) {
+                curr.value = value;
+                return;
+            }
+            if (curr.next == null) break;
+            curr = curr.next;
+        }
+        
+        // Key not found, add to end of linked list
+        curr.next = new Node(key, value);
+    }
+    
+    /** Returns the value to which the specified key is mapped, or -1 if this map contains no mapping for the key */
+    public int get(int key) {
+        int index = getIndex(key);
+        Node head = buckets[index];
+        
+        Node curr = head;
+        while (curr != null) {
+            if (curr.key == key) {
+                return curr.value;
+            }
+            curr = curr.next;
+        }
+        
+        return -1;
+    }
+    
+    /** Removes the mapping of the specified value key if this map contains a mapping for the key */
+    public void remove(int key) {
+        int index = getIndex(key);
+        Node head = buckets[index];
+        
+        if (head == null) return;
+        
+        // If key is at head
+        if (head.key == key) {
+            buckets[index] = head.next;
+            return;
+        }
+        
+        // Search for key in linked list
+        Node prev = head;
+        Node curr = head.next;
+        
+        while (curr != null) {
+            if (curr.key == key) {
+                prev.next = curr.next;
+                return;
+            }
+            prev = curr;
+            curr = curr.next;
+        }
+    }
+    
+    private int getIndex(int key) {
+        return Integer.hashCode(key) % SIZE;
+    }
+    
+    // Node class for linked list chaining
+    private static class Node {
+        int key;
+        int value;
+        Node next;
+        
+        Node(int key, int value) {
+            this.key = key;
+            this.value = value;
+            this.next = null;
+        }
+    }
+}
