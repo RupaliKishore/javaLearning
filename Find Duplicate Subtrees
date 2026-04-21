@@ -1,0 +1,35 @@
+  Find Duplicate Subtrees
+
+
+
+import java.util.*;
+
+public class Solution {
+    Map<String, Integer> map = new HashMap<>();
+    List<TreeNode> result = new ArrayList<>();
+    
+    public List<TreeNode> findDuplicateSubtrees(TreeNode root) {
+        serialize(root);
+        return result;
+    }
+    
+    private String serialize(TreeNode node) {
+        if (node == null) return "#";
+        
+        String left = serialize(node.left);
+        String right = serialize(node.right);
+        
+        // Create unique identifier for this subtree
+        String subtree = node.val + "," + left + "," + right;
+        
+        // Count occurrences
+        map.put(subtree, map.getOrDefault(subtree, 0) + 1);
+        
+        // Add to result when count becomes 2 (first duplicate)
+        if (map.get(subtree) == 2) {
+            result.add(node);
+        }
+        
+        return subtree;
+    }
+}
