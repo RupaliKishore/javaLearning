@@ -1,0 +1,32 @@
+ Intersection of Two Arrays
+
+
+
+ import java.util.*;
+
+public class Solution {
+    public int[] intersection(int[] nums1, int[] nums2) {
+        // Use set to store unique elements from first array
+        Set<Integer> set = new HashSet<>();
+        for (int num : nums1) {
+            set.add(num);
+        }
+        
+        // Find intersection
+        Set<Integer> result = new HashSet<>();
+        for (int num : nums2) {
+            if (set.contains(num)) {
+                result.add(num);
+            }
+        }
+        
+        // Convert to int array
+        int[] arr = new int[result.size()];
+        int i = 0;
+        for (int num : result) {
+            arr[i++] = num;
+        }
+        
+        return arr;
+    }
+}
