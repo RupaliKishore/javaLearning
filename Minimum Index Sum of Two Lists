@@ -1,0 +1,39 @@
+Minimum Index Sum of Two Lists
+
+
+import java.util.*;
+
+public class Solution {
+    public String[] findRestaurant(String[] list1, String[] list2) {
+        Map<String, Integer> map = new HashMap<>();
+        
+        // Store list1 strings with their indices
+        for (int i = 0; i < list1.length; i++) {
+            map.put(list1[i], i);
+        }
+        
+        List<String> result = new ArrayList<>();
+        int minSum = Integer.MAX_VALUE;
+        
+        // Check each string in list2
+        for (int i = 0; i < list2.length; i++) {
+            String str = list2[i];
+            
+            if (map.containsKey(str)) {
+                int sum = i + map.get(str);
+                
+                if (sum < minSum) {
+                    // New minimum found
+                    minSum = sum;
+                    result.clear();
+                    result.add(str);
+                } else if (sum == minSum) {
+                    // Same minimum sum
+                    result.add(str);
+                }
+            }
+        }
+        
+        return result.toArray(new String[0]);
+    }
+}
