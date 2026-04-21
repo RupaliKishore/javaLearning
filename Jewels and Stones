@@ -1,0 +1,26 @@
+  Jewels and Stones
+
+
+
+import java.util.*;
+
+public class Solution {
+    public int numJewelsInStones(String jewels, String stones) {
+        Set<Character> jewelSet = new HashSet<>();
+        
+        // Add all jewels to a set for O(1) lookup
+        for (char c : jewels.toCharArray()) {
+            jewelSet.add(c);
+        }
+        
+        // Count stones that are jewels
+        int count = 0;
+        for (char c : stones.toCharArray()) {
+            if (jewelSet.contains(c)) {
+                count++;
+            }
+        }
+        
+        return count;
+    }
+}
