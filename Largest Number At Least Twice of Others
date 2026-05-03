@@ -1,0 +1,27 @@
+  Largest Number At Least Twice of Others
+
+class Solution {
+    public int dominantIndex(int[] nums) {
+        if (nums.length == 1) return 0;
+        
+        int maxIndex = 0;
+        int secondMax = -1;
+        
+        // Find the largest element and track second largest
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] > nums[maxIndex]) {
+                secondMax = nums[maxIndex];
+                maxIndex = i;
+            } else if (nums[i] > secondMax) {
+                secondMax = nums[i];
+            }
+        }
+        
+        // Check if largest is at least twice the second largest
+        if (nums[maxIndex] >= 2 * secondMax) {
+            return maxIndex;
+        }
+        
+        return -1;
+    }
+}
