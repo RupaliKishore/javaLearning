@@ -1,0 +1,68 @@
+  Diagonal Traverse
+
+
+  import java.util.*;
+
+class Solution {
+    public int[] findDiagonalOrder(int[][] mat) {
+        if (mat == null || mat.length == 0) return new int[0];
+        
+        int m = mat.length;
+        int n = mat[0].length;
+        int[] result = new int[m * n];
+        
+        int row = 0, col = 0;
+        boolean movingUp = true;
+        
+        for (int i = 0; i < m * n; i++) {
+            result[i] = mat[row][col];
+            
+            if (movingUp) {
+                // Moving up-right
+                if (col == n - 1) {
+                    // Hit right boundary, move down
+                    row++;
+                    movingUp = false;
+                } else if (row == 0) {
+                    // Hit top boundary, move right
+                    col++;
+                    movingUp = false;
+                } else {
+                    // Continue moving up-right
+                    row--;
+                    col++;
+                }
+            } else {
+                // Moving down-left
+                if (row == m - 1) {
+                    // Hit bottom boundary, move right
+                    col++;
+                    movingUp = true;
+                } else if (col == 0) {
+                    // Hit left boundary, move down
+                    row++;
+                    movingUp = true;
+                } else {
+                    // Continue moving down-left
+                    row++;
+                    col--;
+                }
+            }
+        }
+        
+        return result;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        
+        // Test case
+        int[][] mat = {{1,2,3},{4,5,6},{7,8,9}};
+        int[] result = solution.findDiagonalOrder(mat);
+        
+        System.out.println(Arrays.toString(result));
+        // Expected output: [1, 2, 4, 7, 5, 3, 6, 8, 9]
+    }
+}
