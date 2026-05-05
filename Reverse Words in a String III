@@ -1,0 +1,31 @@
+Reverse Words in a String III
+
+
+class Solution {
+    public String reverseWords(String s) {
+        char[] chars = s.toCharArray();
+        int start = 0;
+        
+        for (int end = 0; end < chars.length; end++) {
+            // When we find a space or reach the end
+            if (chars[end] == ' ' || end == chars.length - 1) {
+                // Reverse the current word
+                int left = start;
+                int right = (end == chars.length - 1) ? end : end - 1;
+                
+                while (left < right) {
+                    char temp = chars[left];
+                    chars[left] = chars[right];
+                    chars[right] = temp;
+                    left++;
+                    right--;
+                }
+                
+                // Move start to the beginning of next word
+                start = end + 1;
+            }
+        }
+        
+        return new String(chars);
+    }
+}
