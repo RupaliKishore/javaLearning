@@ -1,0 +1,49 @@
+  01 Matrix
+
+
+import java.util.*;
+
+class Solution {
+    public int[][] updateMatrix(int[][] mat) {
+        int rows = mat.length;
+        int cols = mat[0].length;
+        int[][] dist = new int[rows][cols];
+        Queue<int[]> queue = new LinkedList<>();
+        
+        // Initialize: mark all 0s with distance 0, add to queue
+        // Mark all 1s with a large value (unvisited)
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (mat[i][j] == 0) {
+                    dist[i][j] = 0;
+                    queue.offer(new int[]{i, j});
+                } else {
+                    dist[i][j] = Integer.MAX_VALUE;
+                }
+            }
+        }
+        
+        int[][] directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        
+        // BFS from all zeros simultaneously
+        while (!queue.isEmpty()) {
+            int[] current = queue.poll();
+            int row = current[0];
+            int col = current[1];
+            
+            for (int[] dir : directions) {
+                int newRow = row + dir[0];
+                int newCol = col + dir[1];
+                
+                if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols) {
+                    if (dist[newRow][newCol] > dist[row][col] + 1) {
+                        dist[newRow][newCol] = dist[row][col] + 1;
+                        queue.offer(new int[]{newRow, newCol});
+                    }
+                }
+            }
+        }
+        
+        return dist;
+    }
+}
