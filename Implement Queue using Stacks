@@ -1,0 +1,47 @@
+Implement Queue using Stacks
+
+
+import java.util.Stack;
+
+class MyQueue {
+    private Stack<Integer> inputStack;
+    private Stack<Integer> outputStack;
+    
+    public MyQueue() {
+        inputStack = new Stack<>();
+        outputStack = new Stack<>();
+    }
+    
+    // Push element to the back of queue
+    public void push(int x) {
+        inputStack.push(x);
+    }
+    
+    // Remove and return the element from the front of queue
+    public int pop() {
+        if (outputStack.isEmpty()) {
+            transfer();
+        }
+        return outputStack.pop();
+    }
+    
+    // Return the element at the front of queue
+    public int peek() {
+        if (outputStack.isEmpty()) {
+            transfer();
+        }
+        return outputStack.peek();
+    }
+    
+    // Return whether the queue is empty
+    public boolean empty() {
+        return inputStack.isEmpty() && outputStack.isEmpty();
+    }
+    
+    // Transfer all elements from inputStack to outputStack
+    private void transfer() {
+        while (!inputStack.isEmpty()) {
+            outputStack.push(inputStack.pop());
+        }
+    }
+}
