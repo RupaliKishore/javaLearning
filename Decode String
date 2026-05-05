@@ -1,0 +1,44 @@
+  Decode String
+
+
+import java.util.*;
+
+class Solution {
+    public String decodeString(String s) {
+        Stack<Integer> countStack = new Stack<>();
+        Stack<StringBuilder> stringStack = new Stack<>();
+        StringBuilder currentString = new StringBuilder();
+        int k = 0;
+        
+        for (char c : s.toCharArray()) {
+            if (Character.isDigit(c)) {
+                // Build the number (may have multiple digits)
+                k = k * 10 + (c - '0');
+            } 
+            else if (c == '[') {
+                // Push current count and string to stacks
+                countStack.push(k);
+                stringStack.push(currentString);
+                // Reset for new context
+                currentString = new StringBuilder();
+                k = 0;
+            } 
+            else if (c == ']') {
+                // Pop count and previous string
+                int repeatCount = countStack.pop();
+                StringBuilder decodedString = stringStack.pop();
+                // Repeat current string and append to previous
+                for (int i = 0; i < repeatCount; i++) {
+                    decodedString.append(currentString);
+                }
+                currentString = decodedString;
+            } 
+            else {
+                // Regular character
+                currentString.append(c);
+            }
+        }
+        
+        return currentString.toString();
+    }
+}
