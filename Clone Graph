@@ -1,0 +1,56 @@
+Clone Graph
+
+
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public List<Node> neighbors;
+    public Node() {
+        val = 0;
+        neighbors = new ArrayList<Node>();
+    }
+    public Node(int _val) {
+        val = _val;
+        neighbors = new ArrayList<Node>();
+    }
+    public Node(int _val, ArrayList<Node> _neighbors) {
+        val = _val;
+        neighbors = _neighbors;
+    }
+}
+*/
+
+import java.util.*;
+
+class Solution {
+    public Node cloneGraph(Node node) {
+        if (node == null) return null;
+        
+        // Map to store cloned nodes: original -> clone
+        Map<Node, Node> visited = new HashMap<>();
+        Queue<Node> queue = new LinkedList<>();
+        
+        // Clone the first node
+        Node cloneNode = new Node(node.val);
+        visited.put(node, cloneNode);
+        queue.offer(node);
+        
+        while (!queue.isEmpty()) {
+            Node current = queue.poll();
+            
+            // Iterate through neighbors
+            for (Node neighbor : current.neighbors) {
+                if (!visited.containsKey(neighbor)) {
+                    // Clone neighbor if not visited
+                    visited.put(neighbor, new Node(neighbor.val));
+                    queue.offer(neighbor);
+                }
+                // Add cloned neighbor to current node's clone
+                visited.get(current).neighbors.add(visited.get(neighbor));
+            }
+        }
+        
+        return cloneNode;
+    }
+}
