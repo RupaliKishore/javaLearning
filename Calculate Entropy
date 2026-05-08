@@ -1,0 +1,36 @@
+ Calculate Entropy
+
+
+
+import java.util.*;
+
+public class Solution {
+    /**
+     * Calculate Shannon entropy for an array of integers
+     * @param nums Input array
+     * @return Entropy value in bits
+     */
+    public double calculateEntropy(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0.0;
+        }
+        
+        // Count frequency of each number
+        Map<Integer, Integer> frequencyMap = new HashMap<>();
+        for (int num : nums) {
+            frequencyMap.put(num, frequencyMap.getOrDefault(num, 0) + 1);
+        }
+        
+        // Calculate entropy
+        double entropy = 0.0;
+        int length = nums.length;
+        
+        for (int count : frequencyMap.values()) {
+            double probability = (double) count / length;
+            entropy -= probability * (Math.log(probability) / Math.log(2));
+        }
+        
+        // Round to 4 decimal places to avoid floating point precision issues
+        return Math.round(entropy * 10000.0) / 10000.0;
+    }
+}
