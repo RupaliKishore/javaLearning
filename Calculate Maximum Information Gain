@@ -1,0 +1,119 @@
+Calculate Maximum Information Gain
+
+
+
+
+import java.util.*;
+
+public class Solution {
+    
+    /**
+     * Calculate entropy of a set of labels
+     */
+    private double calculateEntropy(String[] labels) {
+        if (labels == null || labels.length == 0) {
+            return 0.0;
+        }
+        
+        Map<String, Integer> frequencyMap = new HashMap<>();
+        for (String label : labels) {
+            frequencyMap.put(label, frequencyMap.getOrDefault(label, 0) + 1);
+        }
+        
+        double entropy = 0.0;
+        int total = labels.length;
+        
+        for (int count : frequencyMap.values()) {
+            double probability = (double) count / total;
+            entropy -= probability * (Math.log(probability) / Math.log(2));
+        }
+        
+        return entropy;
+    }
+    
+    /**
+     * Calculate maximum information gain for a continuous feature
+     * @param features Array of feature values (continuous)
+     * @param labels Array of class labels
+     * @return Maximum information gain
+     */
+    public double calculateMaxInfoGain(double[] features, String[] labels) {
+        if (features == null || labels == null || features.length == 0 || features.length != labels.length) {
+            return 0.0;
+        }
+        
+        // Create pairs of (feature, label) and sort by feature value
+        Pair[] pairs = new Pair[features.length];
+        for (int i = 0; i < features.length; i++) {
+            pairs[i] = new Pair(features[i], labels[i]);
+        }
+        Arrays.sort(pairs, (a, b) -> Double.compare(a.feature, b.feature));
+        
+        // Extract sorted labels
+        String[] sortedLabels = new String[labels.length];
+        for (int i = 0; i < pairs.length; i++) {
+            sortedLabels[i] = pairs[i].label;
+        }
+        
+        double parentEntropy = calculateEntropy(sortedLabels);
+        double maxGain = 0.0;
+        
+        // Try each possible split point between feature values
+        for (int i = 0; i < features.length - 1; i++) {
+            // Skip if feature values are equal (can't split here)
+            if (pairs[i].feature == pairs[i + 1].feature) {
+                continue;
+            }
+            
+            // Split at threshold between pairs[i].feature and pairs[i+1].feature
+            double threshold = (pairs[i].feature + pairs[i + 1].feature) / 2.0;
+            
+            // Calculate weighted entropy after split
+            String[] leftLabels = Arrays.copyOfRange(sortedLabels, 0, i + 1);
+            String[] rightLabels = Arrays.copyOfRange(sortedLabels, i + 1, sortedLabels.length);
+            
+            double leftEntropy = calculateEntropy(leftLabels);
+            double rightEntropy = calculateEntropy(rightLabels);
+            
+            double leftWeight = (double) leftLabels.length / sortedLabels.length;
+            double rightWeight = (double) rightLabels.length / sortedLabels.length;
+            
+            double weightedEntropy = leftWeight * leftEntropy + rightWeight * rightEntropy;
+            double infoGain = parentEntropy - weightedEntropy;
+            
+            maxGain = Math.max(maxGain, infoGain);
+        }
+        
+        // Round to 4 decimal places
+        return Math.round(maxGain * 10000.0) / 10000.0;
+    }
+    
+    // Helper class to pair feature value with label
+    class Pair {
+        double feature;
+        String label;
+        
+        Pair(double feature, String label) {
+            this.feature = feature;
+            this.label = label;
+        }
+    }
+    
+    public static void main(String[] args) {
+        Solution sol = new Solution();
+        
+        // Test with your input
+        double[] features = {0.5, 2.3, 1.0, 1.5};
+        String[] labels = {"setosa", "versicolor", "setosa", "versicolor"};
+        
+        double maxGain = sol.calculateMaxInfoGain(features, labels);
+        System.out.printf("Maximum Information Gain: %.4f bits%n", maxGain);
+        
+        // Additional test
+        double[] features2 = {1.0, 2.0, 3.0, 4.0};
+        String[] labels2 = {"A", "A", "B", "B"};
+        
+        maxGain = sol.calculateMaxInfoGain(features2, labels2);
+        System.out.printf("Maximum Information Gain (test2): %.4f bits%n", maxGain);
+    }
+}
