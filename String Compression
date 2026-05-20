@@ -1,0 +1,37 @@
+String Compression
+
+
+
+class Solution {
+    public int compress(char[] chars) {
+        int index = 0;  // Position to write in the array
+        int i = 0;      // Current position while reading
+        
+        while (i < chars.length) {
+            char currentChar = chars[i];
+            int count = 0;
+            
+            // Count consecutive occurrences
+            while (i < chars.length && chars[i] == currentChar) {
+                count++;
+                i++;
+            }
+            
+            // Write the character
+            chars[index] = currentChar;
+            index++;
+            
+            // Write the count if greater than 1
+            if (count > 1) {
+                // Convert count to characters
+                char[] countChars = Integer.toString(count).toCharArray();
+                for (char c : countChars) {
+                    chars[index] = c;
+                    index++;
+                }
+            }
+        }
+        
+        return index;
+    }
+}
