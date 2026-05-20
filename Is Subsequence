@@ -1,0 +1,27 @@
+Is Subsequence
+
+
+
+class Solution {
+    public boolean isSubsequence(String s, String t) {
+        // If s is empty, it's always a subsequence
+        if (s.length() == 0) {
+            return true;
+        }
+        
+        int sIndex = 0;  // Pointer for string s
+        int tIndex = 0;  // Pointer for string t
+        
+        while (tIndex < t.length() && sIndex < s.length()) {
+            // If characters match, move s pointer
+            if (s.charAt(sIndex) == t.charAt(tIndex)) {
+                sIndex++;
+            }
+            // Always move t pointer
+            tIndex++;
+        }
+        
+        // If we've matched all characters in s, it's a subsequence
+        return sIndex == s.length();
+    }
+}
