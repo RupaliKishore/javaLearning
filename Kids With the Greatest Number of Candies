@@ -1,0 +1,27 @@
+Kids With the Greatest Number of Candies
+
+
+
+import java.util.ArrayList;
+import java.util.List;
+
+class Solution {
+    public List<Boolean> kidsWithCandies(int[] candies, int extraCandies) {
+        List<Boolean> result = new ArrayList<>();
+        
+        // Find the maximum candies any kid currently has
+        int maxCandies = 0;
+        for (int candy : candies) {
+            maxCandies = Math.max(maxCandies, candy);
+        }
+        
+        // Check each kid
+        for (int candy : candies) {
+            // If current kid's candies + extraCandies >= maxCandies
+            // then they can have the greatest number
+            result.add(candy + extraCandies >= maxCandies);
+        }
+        
+        return result;
+    }
+}
