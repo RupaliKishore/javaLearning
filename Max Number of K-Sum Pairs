@@ -1,0 +1,43 @@
+Max Number of K-Sum Pairs
+
+
+
+import java.util.HashMap;
+import java.util.Map;
+
+class Solution {
+    public int maxOperations(int[] nums, int k) {
+        Map<Integer, Integer> frequency = new HashMap<>();
+        int operations = 0;
+        
+        // Count frequency of each number
+        for (int num : nums) {
+            frequency.put(num, frequency.getOrDefault(num, 0) + 1);
+        }
+        
+        // Find pairs that sum to k
+        for (int num : nums) {
+            int complement = k - num;
+            
+            // Skip if current number already used
+            if (frequency.getOrDefault(num, 0) <= 0) {
+                continue;
+            }
+            
+            // If complement exists and has count > 0
+            if (frequency.getOrDefault(complement, 0) > 0) {
+                // If num and complement are the same, need at least 2 occurrences
+                if (num == complement && frequency.get(num) < 2) {
+                    continue;
+                }
+                
+                // Use one pair
+                operations++;
+                frequency.put(num, frequency.get(num) - 1);
+                frequency.put(complement, frequency.get(complement) - 1);
+            }
+        }
+        
+        return operations;
+    }
+}
